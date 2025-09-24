@@ -6,7 +6,7 @@ function NewsSection() {
   const [news, setNews] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/news')
+    fetch('https://trading-backend-mdb5.onrender.com/api/news')
       .then(res => res.json())
       .then(setNews)
       .catch(err => console.error('Error fetching news:', err));
