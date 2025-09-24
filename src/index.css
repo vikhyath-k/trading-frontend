@@ -1,0 +1,14 @@
+/* Global reset — gives you a consistent, unrestricted layout */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body, #root {
+  width: 100%;
+  min-height: 100vh;
+  font-family: 'DM Sans',sans-serif;
+  background-color: #f5f6fa;  /* Optional: sets your base background */
+  color: #000000;              /* Optional: sets your base text color */
+}

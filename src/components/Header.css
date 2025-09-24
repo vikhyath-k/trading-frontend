@@ -1,0 +1,103 @@
+/* ---------- HEADER CONTAINER ---------- */
+.header {
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  background-color: #054A91;      /* Sapphire background */
+  color: #FFFFFF;
+  box-sizing: border-box;
+  height: 58px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* ---------- LOGO ---------- */
+.logo {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  letter-spacing: 0.5px;
+  text-transform: none;           /* Keep lowercase */
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ---------- HEADER CENTER (SEARCH BAR CONTAINER) ---------- */
+.header-center {
+  flex: 1;                        /* Allow to grow between left and right */
+  display: flex;
+  justify-content: center;        /* Center the search bar horizontally */
+}
+
+/* ---------- SEARCH BAR ---------- */
+.header-center .Search-bar {
+  padding: 0.5rem 1rem;         /* Nice spacious padding */
+  border: none;
+  border-radius: 8px;            /* Big value = pill shape */
+  width: 100%;                    /* Fill center container */
+  max-width: 600px;               /* Don’t get too huge on big screens */
+  font-size: 1rem;
+  box-sizing: border-box;
+  background-color: #ffffff;      /* Light sapphire background */
+  color: #0a0a0a;                 /* Sapphire text */
+  flex-grow: 1;                   /* Make it stretch if allowed */
+  transition: max-width 0.2s ease;
+}
+
+.header-center .Search-bar::placeholder {
+  color: #4d4a4a;                 /* Softer sapphire placeholder */
+}
+.header-center .Search-bar:focus{
+    outline: none;
+    max-width: 605px;   
+}
+
+/* ---------- NAV LINKS + LOGIN ---------- */
+.header-right {
+  display: flex;
+  margin-right: 6px;
+  align-items: center;
+  justify-content: center;  /* Spread items across full width of header-right */
+  flex: 1;    
+  gap: 2rem;                     /* Allow header-right to grow in header flex */
+  max-width: 300px;                /* Optional: limit how wide header-right can go */
+}
+
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-links a {
+  color: #FFFFFF;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #E0E0E0;  
+  transform: scale(1.1);              /* Lighter sapphire on hover */
+}
+
+.login-button {
+  padding: 0.5rem 1rem;
+  background-color: #FFFFFF;
+  color: #054A91;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.login-button:hover {
+  background-color: #F0F0F0;
+}
