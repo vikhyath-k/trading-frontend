@@ -6,63 +6,48 @@ const MarketsPage = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('overview');
+  const CLIENT_ID = import.meta.env.VITE_SMARTAPI_CLIENT_ID;
+  const API_KEY = import.meta.env.VITE_SMARTAPI_API_KEY;
 
-  // Mock data for demonstration - replace with actual API calls
-  const mockMarketData = {
-    indices: [
-      { name: 'NIFTY 50', value: '22,419.95', change: '+156.30', changePercent: '+0.70%', trend: 'up' },
-      { name: 'SENSEX', value: '73,852.94', change: '+486.50', changePercent: '+0.66%', trend: 'up' },
-      { name: 'BANK NIFTY', value: '48,123.45', change: '+234.20', changePercent: '+0.49%', trend: 'up' },
-      { name: 'NIFTY IT', value: '36,789.12', change: '-123.45', changePercent: '-0.33%', trend: 'down' }
-    ],
-    topGainers: [
-      { symbol: 'RELIANCE', name: 'Reliance Industries', price: '2,456.78', change: '+45.67', changePercent: '+1.89%' },
-      { symbol: 'TCS', name: 'Tata Consultancy', price: '3,789.45', change: '+67.89', changePercent: '+1.83%' },
-      { symbol: 'HDFC', name: 'HDFC Bank', price: '1,567.34', change: '+23.45', changePercent: '+1.52%' },
-      { symbol: 'INFY', name: 'Infosys', price: '1,234.56', change: '+18.90', changePercent: '+1.55%' }
-    ],
-    topLosers: [
-      { symbol: 'WIPRO', name: 'Wipro', price: '456.78', change: '-12.34', changePercent: '-2.64%' },
-      { symbol: 'TECHM', name: 'Tech Mahindra', price: '1,123.45', change: '-28.90', changePercent: '-2.51%' },
-      { symbol: 'HCLTECH', name: 'HCL Technologies', price: '987.65', change: '-15.67', changePercent: '-1.56%' },
-      { symbol: 'LT', name: 'Larsen & Toubro', price: '2,345.67', change: '-34.56', changePercent: '-1.45%' }
-    ],
-    sectors: [
-      { name: 'Banking', performance: '+2.34%', trend: 'up' },
-      { name: 'IT', performance: '-1.23%', trend: 'down' },
-      { name: 'Pharma', performance: '+0.89%', trend: 'up' },
-      { name: 'Auto', performance: '+1.56%', trend: 'up' },
-      { name: 'FMCG', performance: '+0.67%', trend: 'up' },
-      { name: 'Realty', performance: '-0.45%', trend: 'down' }
-    ],
-    volumeLeaders: [
-      { symbol: 'RELIANCE', name: 'Reliance Industries', volume: '2.34M', price: '2,456.78', change: '+1.89%' },
-      { symbol: 'TCS', name: 'Tata Consultancy', volume: '1.89M', price: '3,789.45', change: '+1.83%' },
-      { symbol: 'INFY', name: 'Infosys', volume: '1.67M', price: '1,234.56', change: '+1.55%' },
-      { symbol: 'HDFC', name: 'HDFC Bank', volume: '1.45M', price: '1,567.34', change: '+1.52%' }
-    ]
-  };
-
+  
   useEffect(() => {
-    // Simulate API call
     const fetchMarketData = async () => {
       try {
-        // Replace with actual API call
-        // const response = await fetch('/api/markets');
-        // const data = await response.json();
+        // Example endpoint for indices or market feeds
+        const response = await fetch('https://trading-backend-mdb5.onrender.com/api/market/feeds', {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${API_KEY}`,  // or token from OAuth flow
+            "Content-Type": "application/json",
+            apikey: CLIENT_ID
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         
-        setTimeout(() => {
-          setMarketData(mockMarketData);
-          setLoading(false);
-        }, 1000);
+        const data = await response.json();
+
+        // Transform data to match your UI structure
+        const formattedData = {
+          indices: data.indices || [],       // map as needed
+          topGainers: data.topGainers || [],
+          topLosers: data.topLosers || [],
+          sectors: data.sectors || [],
+          volumeLeaders: data.volumeLeaders || [],
+        };
+
+        setMarketData(formattedData);
       } catch (error) {
-        console.error('Error fetching market data:', error);
+        console.error("Error fetching market data:", error);
+      } finally {
         setLoading(false);
       }
     };
-
+  
     fetchMarketData();
   }, []);
+  
 
   const filteredData = (data) => {
     if (!searchTerm) return data;
@@ -101,16 +86,20 @@ const MarketsPage = () => {
       <div className="market-indices">
         <h2>Market Indices</h2>
         <div className="indices-grid">
-          {marketData.indices.map((index, idx) => (
-            <div key={idx} className={`index-card ${index.trend}`}>
-              <div className="index-name">{index.name}</div>
-              <div className="index-value">{index.value}</div>
-              <div className="index-change">
-                <span className="change-value">{index.change}</span>
-                <span className="change-percent">{index.changePercent}</span>
+          {marketData?.indices?.length > 0 ? (
+            marketData.indices.map((index, idx) => (
+              <div key={idx} className={`index-card ${index.trend}`}>
+                <div className="index-name">{index.name}</div>
+                <div className="index-value">{index.value}</div>
+                <div className="index-change">
+                  <span className="change-value">{index.change}</span>
+                  <span className="change-percent">{index.changePercent}</span>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <div className="no-data">No market indices data available</div>
+          )}
         </div>
       </div>
 
@@ -195,7 +184,7 @@ const MarketsPage = () => {
                 <span>Change</span>
                 <span>% Change</span>
               </div>
-              {filteredData(marketData.topGainers).map((stock, idx) => (
+              {filteredData(marketData?.topGainers || []).map((stock, idx) => (
                 <div key={idx} className="stock-row positive">
                   <span className="stock-symbol">{stock.symbol}</span>
                   <span className="stock-name">{stock.name}</span>
@@ -219,7 +208,7 @@ const MarketsPage = () => {
                 <span>Change</span>
                 <span>% Change</span>
               </div>
-              {filteredData(marketData.topLosers).map((stock, idx) => (
+              {filteredData(marketData?.topLosers || []).map((stock, idx) => (
                 <div key={idx} className="stock-row negative">
                   <span className="stock-symbol">{stock.symbol}</span>
                   <span className="stock-name">{stock.name}</span>
@@ -236,7 +225,7 @@ const MarketsPage = () => {
           <div className="sectors-grid">
             <h3>Sector Performance</h3>
             <div className="sectors-list">
-              {marketData.sectors.map((sector, idx) => (
+              {(marketData?.sectors || []).map((sector, idx) => (
                 <div key={idx} className={`sector-card ${sector.trend}`}>
                   <div className="sector-name">{sector.name}</div>
                   <div className="sector-performance">
@@ -261,7 +250,7 @@ const MarketsPage = () => {
                 <span>Price</span>
                 <span>% Change</span>
               </div>
-              {filteredData(marketData.volumeLeaders).map((stock, idx) => (
+              {filteredData(marketData?.volumeLeaders || []).map((stock, idx) => (
                 <div key={idx} className="stock-row">
                   <span className="stock-symbol">{stock.symbol}</span>
                   <span className="stock-name">{stock.name}</span>
