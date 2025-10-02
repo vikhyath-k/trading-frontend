@@ -5,7 +5,7 @@ const MarketsPage = () => {
   const [marketData, setMarketData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('gainers');
   const CLIENT_ID = import.meta.env.VITE_SMARTAPI_CLIENT_ID;
   const API_KEY = import.meta.env.VITE_SMARTAPI_API_KEY;
 
@@ -82,35 +82,8 @@ const MarketsPage = () => {
         </div>
       </div>
 
-      {/* Market Indices Overview */}
-      <div className="market-indices">
-        <h2>Market Indices</h2>
-        <div className="indices-grid">
-          {marketData?.indices?.length > 0 ? (
-            marketData.indices.map((index, idx) => (
-              <div key={idx} className={`index-card ${index.trend}`}>
-                <div className="index-name">{index.name}</div>
-                <div className="index-value">{index.value}</div>
-                <div className="index-change">
-                  <span className="change-value">{index.change}</span>
-                  <span className="change-percent">{index.changePercent}</span>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="no-data">No market indices data available</div>
-          )}
-        </div>
-      </div>
-
       {/* Navigation Tabs */}
       <div className="markets-tabs">
-        <button 
-          className={`tab-button ${activeTab === 'overview' ? 'active' : ''}`}
-          onClick={() => setActiveTab('overview')}
-        >
-          Market Overview
-        </button>
         <button 
           className={`tab-button ${activeTab === 'gainers' ? 'active' : ''}`}
           onClick={() => setActiveTab('gainers')}
@@ -139,40 +112,6 @@ const MarketsPage = () => {
 
       {/* Tab Content */}
       <div className="tab-content">
-        {activeTab === 'overview' && (
-          <div className="market-overview">
-            <div className="overview-grid">
-              <div className="overview-card">
-                <h3>Market Breadth</h3>
-                <div className="breadth-stats">
-                  <div className="stat">
-                    <span className="stat-label">Advances</span>
-                    <span className="stat-value positive">1,234</span>
-                  </div>
-                  <div className="stat">
-                    <span className="stat-label">Declines</span>
-                    <span className="stat-value negative">567</span>
-                  </div>
-                  <div className="stat">
-                    <span className="stat-label">Unchanged</span>
-                    <span className="stat-value">89</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="overview-card">
-                <h3>Market Sentiment</h3>
-                <div className="sentiment-indicator">
-                  <div className="sentiment-bar">
-                    <div className="sentiment-fill positive" style={{width: '68%'}}></div>
-                  </div>
-                  <span className="sentiment-text">Bullish</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
         {activeTab === 'gainers' && (
           <div className="stocks-list">
             <h3>Top Gainers</h3>
@@ -189,7 +128,7 @@ const MarketsPage = () => {
                   <span className="stock-symbol">{stock.symbol}</span>
                   <span className="stock-name">{stock.name}</span>
                   <span className="stock-price">₹{stock.price}</span>
-                  <span className="stock-change positive">+{stock.change}</span>
+                  <span className="stock-change positive">{stock.change}</span>
                   <span className="stock-change-percent positive">{stock.changePercent}</span>
                 </div>
               ))}
